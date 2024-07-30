@@ -15,8 +15,9 @@ Este projeto implementa uma topologia SDN usando Mininet e modifica um controlad
 
 ### 1. Configurar e Iniciar o Controlador POX
 
-Vá até a pasta onde o controlador POX está instalado e execute o controlador modificado:
+.Inserir o script controlador_pox na pasta /pox/ext
+.Ir até a pasta onde o controlador POX está instalado e execute o controlador modificado:
 
 ```bash
 cd ~/pox
-./pox.py src/controlador_pox
+./pox.py controlador_pox
