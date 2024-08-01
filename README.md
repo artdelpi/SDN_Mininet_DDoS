@@ -43,7 +43,3 @@ Este projeto implementa uma topologia SDN usando Mininet e modifica um controlad
 
 3. Verifique o log no terminal do controlador: deve indicar que o host foi bloqueado e o pacote foi descartado.
 4. Verifique o log no terminal da topologia: deve indicar que o host é inalcançável.
-
-```bash
-cd ~/pox
-./pox.py controlador_pox
