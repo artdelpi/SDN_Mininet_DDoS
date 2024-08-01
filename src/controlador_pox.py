@@ -16,6 +16,7 @@ class MitigacaoSimplesDDoS(object):
         self.blocked_hosts = set()
         core.openflow.addListeners(self)
         Timer(1, self._reset_counts, recurring=True)
+        log.info('Controlador DDoS Mitigation inicializado')
 
     def _reset_counts(self):
         self.packet_counts.clear()
@@ -27,12 +28,14 @@ class MitigacaoSimplesDDoS(object):
 
         # Descarta pacote para host bloqueado
         if src_mac in self.blocked_hosts:
+            log.info('Bloqueando pacote de %s', src_mac)
             return
 
         # Verificar se o pacote é ICMP
         if packet.find("icmp"):
             self.packet_counts[src_mac] += 1
             if self.packet_counts[src_mac] > THRESHOLD:
+                log.info('Bloqueando host %s', src_mac)
                 self.blocked_hosts.add(src_mac)
                 # Insere regra para bloquear o host
                 msg = of.ofp_flow_mod()
@@ -49,6 +52,7 @@ class MitigacaoSimplesDDoS(object):
         msg.hard_timeout = 30
         msg.actions.append(of.ofp_action_output(port=of.OFPP_FLOOD))
         event.connection.send(msg)
+        log.info('Permitindo tráfego de %s', src_mac)
 
 def launch():
     core.registerNew(MitigacaoSimplesDDoS)

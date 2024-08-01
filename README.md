@@ -43,9 +43,6 @@ Este projeto implementa uma topologia SDN usando Mininet e modifica um controlad
 
 3. Verifique o log no terminal do controlador: deve indicar que o host foi bloqueado e o pacote foi descartado.
 4. Verifique o log no terminal da topologia: deve indicar que o host é inalcançável.
-=======
-.Inserir o script controlador_pox na pasta /pox/ext
-.Ir até a pasta onde o controlador POX está instalado e execute o controlador modificado:
 
 ```bash
 cd ~/pox
