@@ -1,6 +1,6 @@
 # Projeto de Mitigação de Ataques DoS e DDoS usando SDN
 
-Este projeto busca implementar uma topologia SDN usando Mininet e modifica um controlador POX para mitigar ataques de negação de serviço (DoS) e negação de serviço distribuído (DDoS). O projeto também trata de inserir controle de acesso ao permitir, simulando comportamento semelhante a VLANs; a comunicação é exclusiva de h1 com h2 e h3 com h4.
+Este projeto busca implementar uma topologia SDN usando Mininet e modifica um controlador POX para mitigar ataques de negação de serviço (DoS) e negação de serviço distribuído (DDoS). O projeto também trata de inserir controle de acesso, simulando comportamento semelhante a VLANs; a comunicação é exclusiva de h1 com h2 e h3 com h4.
 
 ## Requisitos
 
