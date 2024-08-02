@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from pox.core import core
 import pox.openflow.libopenflow_01 as of
 from pox.lib.recoco import Timer
@@ -8,9 +6,22 @@ from collections import defaultdict
 log = core.getLogger()
 
 # Limite de pacotes por segundo
-THRESHOLD = 10
+THRESHOLD = 5
 
-class MitigacaoSimplesDDoS(object):
+class ControladorMitigacaoEControle(object):
+    """
+    Este controlador POX trata de prover segurança à rede,
+    mitigando ataques de negação de serviço e políticas de acesso, simulando VLANs.
+
+    Funcionalidades:
+    1. Mitigação de Dos e DDoS:
+        - Observa o fluxo ICMP dos hosts.
+        - Bloqueia hosts que enviarem mais de 5 pacotes ICMP por segundo.
+    
+    2. Controle de Acesso:
+        - Simula comportamento de VLANs ao bloquear comunicação de hosts específicos.
+        - Impede a comunicação de 'h1' e 'h2' com 'h3' e 'h4'.
+    """
     def __init__(self):
         self.packet_counts = defaultdict(int)
         self.blocked_hosts = set()
@@ -24,7 +35,26 @@ class MitigacaoSimplesDDoS(object):
     def _handle_PacketIn(self, event):
         packet = event.parsed
         in_port = event.port
+
         src_mac = str(packet.src)
+        dst_mac = str(packet.dst)
+
+        # Controle de acesso para simular VLAN
+        vlan_block = [
+            ('00:00:00:00:00:01', '00:00:00:00:00:03'), # Impede h1 -> h3
+            ('00:00:00:00:00:01', '00:00:00:00:00:04'), # Impede h1 -> h4
+            ('00:00:00:00:00:02', '00:00:00:00:00:03'), # Impede h2 -> h3
+            ('00:00:00:00:00:02', '00:00:00:00:00:04'), # Impede h2 -> h4
+            ('00:00:00:00:00:03', '00:00:00:00:00:01'), # Impede h3 -> h1
+            ('00:00:00:00:00:03', '00:00:00:00:00:02'), # Impede h3 -> h2
+            ('00:00:00:00:00:04', '00:00:00:00:00:01'), # Impede h4 -> h1
+            ('00:00:00:00:00:04', '00:00:00:00:00:02')  # Impede h4 -> h2
+        ]
+
+        for src, dst in vlan_block:
+            if src_mac == src and dst_mac == dst:
+                log.info('Bloqueando comunicação entre %s e %s', src, dst)
+                return
 
         # Descarta pacote para host bloqueado
         if src_mac in self.blocked_hosts:
@@ -55,4 +85,4 @@ class MitigacaoSimplesDDoS(object):
         log.info('Permitindo tráfego de %s', src_mac)
 
 def launch():
-    core.registerNew(MitigacaoSimplesDDoS)
+    core.registerNew(ControladorMitigacaoEControle)
