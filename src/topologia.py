@@ -11,7 +11,7 @@ def topologiaSDN():
     net.addController(name='c0',
                       controller=RemoteController,
                       ip='127.0.0.1',
-                      port=6633)
+                      port=6633 # Porta associada ao controlador POX)
 
     info('*** Adicionando switches\n')
     s1 = net.addSwitch('s1')
